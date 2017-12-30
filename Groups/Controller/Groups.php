@@ -13,7 +13,7 @@ class Groups extends \Cockpit\AuthController {
         $current  = $this->user["_id"];
         $groups   = $this->module('cockpit')->getGroups();
 
-        return $this->render('groups:views/groups/index.php', compact('current', 'groups'));
+        return $this->render('groups:views/index.php', compact('current', 'groups'));
     }
 
     public function group($gid=null) {
@@ -30,7 +30,7 @@ class Groups extends \Cockpit\AuthController {
 
         $fields    = $this->app->retrieve('config/groups/fields', null);
 
-        return $this->render('groups:views/groups/group.php', compact('group', 'gid', 'fields'));
+        return $this->render('groups:views/group.php', compact('group', 'gid', 'fields'));
     }
 
     public function create() {
@@ -49,7 +49,7 @@ class Groups extends \Cockpit\AuthController {
             ]
         ];
 
-        return $this->render('groups:views/groups/group.php', compact('group', 'collections'));
+        return $this->render('groups:views/group.php', compact('group', 'collections'));
     }
 
     public function save() {
