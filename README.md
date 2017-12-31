@@ -1,6 +1,6 @@
 # Groups Management UI Addon for Cockpit
 
-https://github.com/serjoscha87/cockpit_GROUPS.git
+https://github.com/agentejo/cockpit
 
 ## Installation
 

@@ -14,24 +14,10 @@ $app->bind('/groups', function() {
 });
 $app->bindClass('Cockpit\\Controller\\Groups', 'groups');
 
-
 /**
  * on admint init
  */
-$app->on('admin.init', function() {
-   /*
-   if ($this->module('cockpit')->hasaccess('cockpit', 'groups')) {
-      // add to modules menu
-      $this('admin')->addMenuItem('modules', [
-          'label' => 'Groups',
-          'icon' => 'addons/Groups/assets/icons/accounts.svg',
-          'route' => '/groups',
-          'active' => strpos($this['route'], '/groups') === 0
-      ]);
-   }
-   */
-}, 0);
-
+$app->on('admin.init', function() {}, 0);
 
 /**
  * listen to app search to filter accounts
@@ -55,7 +41,7 @@ $app->on('cockpit.search', function($search, $list) {
 });
 
 /*
- * add menu entry if the user has access
+ * add menu entry if the user has access to group stuff
  */
 $this->on('cockpit.menu.aside', function() {
    if ($this->module('cockpit')->hasaccess('cockpit', 'groups')) {
@@ -69,15 +55,14 @@ $this->on('cockpit.menu.aside', function() {
 $app->on("admin.dashboard.widgets", function($widgets) {
 
    $title = $this("i18n")->get("Groups");
+   $groups = $this->storage->find('cockpit/groups')->toArray();
 
    $widgets[] = [
        "name" => "groups",
-       "content" => $this->view("groups:views/partials/widget.php", compact('title')),
+       "content" => $this->view("groups:views/partials/widget.php", compact('title', 'groups')),
        "area" => 'main'
    ];
 }, 100);
 
-/*
- * ...
- */
+// ...
 $app('admin')->init();
