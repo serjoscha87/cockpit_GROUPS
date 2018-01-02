@@ -53,15 +53,16 @@ $this->on('cockpit.menu.aside', function() {
  * dashboard widget
  */
 $app->on("admin.dashboard.widgets", function($widgets) {
+   if ($this->module('cockpit')->hasaccess('cockpit', 'groups')) {
+      $title = $this("i18n")->get("Groups");
+      $groups = $this->storage->find('cockpit/groups')->toArray();
 
-   $title = $this("i18n")->get("Groups");
-   $groups = $this->storage->find('cockpit/groups')->toArray();
-
-   $widgets[] = [
-       "name" => "groups",
-       "content" => $this->view("groups:views/partials/widget.php", compact('title', 'groups')),
-       "area" => 'main'
-   ];
+      $widgets[] = [
+          "name" => "groups",
+          "content" => $this->view("groups:views/partials/widget.php", compact('title', 'groups')),
+          "area" => 'main'
+      ];
+   }
 }, 100);
 
 // ...

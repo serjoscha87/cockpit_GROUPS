@@ -4,92 +4,95 @@ namespace Cockpit\Controller;
 
 class Groups extends \Cockpit\AuthController {
 
-    public function index() {
+   public function index() {
 
-        if (!$this->module('cockpit')->hasaccess('cockpit', 'groups')) {
-            return $this->helper('admin')->denyRequest();
-        }
+      if (!$this->module('cockpit')->hasaccess('cockpit', 'groups')) {
+         return $this->helper('admin')->denyRequest();
+      }
 
-        $current  = $this->user["_id"];
-        $groups   = $this->module('cockpit')->getGroups();
+      $current = $this->user["_id"];
+      $groups = $this->module('cockpit')->getGroups();
 
-        return $this->render('groups:views/index.php', compact('current', 'groups'));
-    }
+      return $this->render('groups:views/index.php', compact('current', 'groups'));
+   }
 
-    public function group($gid=null) {
+   public function group($gid = null) {
 
-        if (!$gid) {
-            $gid = $this->group["_id"];
-        }
+      if (!$gid) {
+         $gid = $this->group["_id"];
+      }
 
-        $group = $this->app->storage->findOne("cockpit/groups", ["_id" => $gid]);
+      if (!$this->module('cockpit')->hasaccess('cockpit', 'groups')) {
+         return $this->helper('admin')->denyRequest();
+      }
 
-        if (!$group) {
-            return false;
-        }
+      $group = $this->app->storage->findOne("cockpit/groups", ["_id" => $gid]);
 
-        $fields    = $this->app->retrieve('config/groups/fields', null);
+      if (!$group) {
+         return false;
+      }
 
-        return $this->render('groups:views/group.php', compact('group', 'gid', 'fields'));
-    }
+      $fields = $this->app->retrieve('config/groups/fields', null);
 
-    public function create() {
+      return $this->render('groups:views/group.php', compact('group', 'gid', 'fields'));
+   }
 
-        $collections = $this->module('collections')->collections();
+   public function create() {
 
-        // defaults for the creation of a new group
-        $group = [
-            'group' => '', // group name
-            //'vars' => ['' => ''],
-            'admin' => false,
-            'cockpit' => [
-                'finder' => true,
-                'rest' => true,
-                'backend' => true
-            ]
-        ];
+      $collections = $this->module('collections')->collections();
 
-        return $this->render('groups:views/group.php', compact('group', 'collections'));
-    }
+      // defaults for the creation of a new group
+      $group = [
+          'group' => '', // group name
+          //'vars' => ['' => ''],
+          'admin' => false,
+          'cockpit' => [
+              'finder' => true,
+              'rest' => true,
+              'backend' => true
+          ]
+      ];
 
-    public function save() {
+      return $this->render('groups:views/group.php', compact('group', 'collections'));
+   }
 
-        if ($data = $this->param("group", false)) {
+   public function save() {
 
-            $data["_modified"] = time();
+      if ($data = $this->param("group", false)) {
 
-            if (!isset($data['_id'])) {
-                $data["_created"] = $data["_modified"];
-            }
+         $data["_modified"] = time();
 
-            $this->app->storage->save("cockpit/groups", $data);
+         if (!isset($data['_id'])) {
+            $data["_created"] = $data["_modified"];
+         }
 
-            return json_encode($data);
-        }
+         $this->app->storage->save("cockpit/groups", $data);
 
-        return false;
+         return json_encode($data);
+      }
 
-    }
+      return false;
+   }
 
-    public function remove() {
+   public function remove() {
 
-        if ($data = $this->param("group", false)) {
+      if ($data = $this->param("group", false)) {
 
-            // can't delete own group
-            if ($data["_id"] != $this->user["_id"]) {
+         // can't delete own group
+         if ($data["_id"] != $this->user["_id"]) {
 
-                $this->app->storage->remove("cockpit/groups", ["_id" => $data["_id"]]);
+            $this->app->storage->remove("cockpit/groups", ["_id" => $data["_id"]]);
 
-                return '{"success":true}';
-            }
-        }
+            return '{"success":true}';
+         }
+      }
 
-        return false;
-    }
+      return false;
+   }
 
-    public function find() {
+   public function find() {
 
-      $options =  $this->param('options', []);
+      $options = $this->param('options', []);
 
       $groups = $this->storage->find("cockpit/groups", $options)->toArray(); // get groups from db
       $count = (!isset($options['skip']) && !isset($options['limit'])) ? count($groups) : $this->storage->count("cockpit/groups", isset($options['filter']) ? $options['filter'] : []);
