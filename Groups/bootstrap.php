@@ -37,6 +37,7 @@ foreach ($groups_data as $i => $row) {
    $acls_filtered = [
        'cockpit' => @$row['cockpit'],
        'collections' => @$row['collections'],
+       'singletons' => @$row['singletons'],
        'regions' => @$row['regions'],
        'forms' => @$row['forms']
    ];
