@@ -193,6 +193,18 @@
                 <field-boolean bind="group.forms.manage" label="@lang('Manage')"></field-boolean>
             </div>
         </div>
+        <div class="uk-form-row">
+            <strong class="uk-text-uppercase">singletons</strong>
+            <div class="uk-margin-small-top">
+                <field-boolean bind="group.singletons.create" label="@lang('Create')"></field-boolean>
+            </div>
+            <div class="uk-margin-small-top">
+                <field-boolean bind="group.singletons.delete" label="@lang('Delete')"></field-boolean>
+            </div>
+            <div class="uk-margin-small-top">
+                <field-boolean bind="group.singletons.manage" label="@lang('Manage')"></field-boolean>
+            </div>
+        </div>
 
     </div>
 
