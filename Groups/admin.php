@@ -4,7 +4,9 @@ require_once(__DIR__ . '/Controller/Groups.php');
 /**
  * register assets
  */
-$app['app.assets.base'] = array_merge($app['app.assets.base'], [sprintf("%s/%s",__DIR__,'assets/css/groups.css')]);
+$app['app.assets.base'] = array_merge($app['app.assets.base'], [
+    'groups:assets/css/groups.css'
+]);
 
 /**
  * register routes
