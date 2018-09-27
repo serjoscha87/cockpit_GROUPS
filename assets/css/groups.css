@@ -39,3 +39,7 @@ field-boolean[disabled] {
 .shrinkable-group .uk-flex-item-1 > .uk-margin > div.uk-margin-top {
     margin-bottom: 20px;
 }
+
+body.singleton .shrinkable-group svg {
+    max-width: 30px;
+}
