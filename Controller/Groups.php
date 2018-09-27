@@ -44,6 +44,7 @@ class Groups extends \Cockpit\AuthController {
       // defaults for the creation of a new group
       $group = [
           'group' => '', // group name
+          'password' => '',
           'vars' => [
               'finder.path' => '/storage',
               'finder.allowed_uploads' => 10,
