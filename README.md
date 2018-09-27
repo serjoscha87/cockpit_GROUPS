@@ -15,7 +15,7 @@ _Sep 2018:_
 
 ## Installation
 
-copy the "Groups" folder from this repository to <your-docroot>/cockpit/addons/
+check this repository out to <your-docroot>/cockpit/addons/.
 
 ## Other projects according to cockpit
 https://github.com/serjoscha87/cockpit_GroupBoundAssets
