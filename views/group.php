@@ -23,13 +23,14 @@
                         <div>
                             <div class="uk-form-row">
                                 <label class="uk-text-small">@lang('Group Name')</label>
-                                <input class="uk-width-1-1 uk-form-large" type="text" bind="group.group" required>
+                                <input class="uk-width-1-1 uk-form-large" type="text" placeholder="@lang('Group Name')" bind="group.group" required>
                             </div>
                         </div>
 
                         <div class="_uk-grid-margin uk-margin-small-top">
                             <strong class="uk-text-uppercase">vars</strong>
-                            <div class="uk-panel uk-panel-box uk-panel-card var-row uk-hidden">
+                            <button type="button" onclick="{ dupe_var_row }" class="uk-button uk-button-small uk-button-success uk-float-right uk-margin-small-top uk-margin-small-bottom">+</button>
+                            <div class="uk-panel uk-panel-box uk-panel-card var-row uk-hidden uk-margin-small-bottom">
                                 <div class="uk-grid uk-grid-small">
                                     <div class="uk-flex-item-1 uk-flex">
                                         <input class="uk-width-1-4 uk-form-small" type="text" placeholder="key" >
@@ -41,10 +42,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="uk-width-1-1 uk-margin-small-top" ref="vars">
+                            <div class="uk-width-1-1 uk-margin-top" ref="vars">
                                 @if(isset($group['vars']))
                                     @foreach( $group['vars'] as $key => $val)
-                                    <div class="uk-panel uk-panel-box uk-panel-card var-row">
+                                    <div class="uk-panel uk-panel-box uk-panel-card var-row uk-margin-small-bottom">
                                         <div class="uk-grid uk-grid-small">
                                             <div class="uk-flex-item-1 uk-flex">
                                                 <input class="uk-width-1-4 uk-form-small" type="text" placeholder="key" value="{{$key}}"><!-- TODO JB: perhaps create autocomplete for valid keys (jquery ui style) -->
@@ -59,16 +60,18 @@
                                     @endforeach
                                 @endif
                             </div>
-                            <button type="button" onclick="{ dupe_var_row }" class="uk-button uk-button-small uk-button-success uk-float-right uk-margin-small-top uk-margin-small-bottom">+</button>
                             <hr style="clear:both" class="uk-margin-small-top" />
                         </div>
 
                         @if(!isset($group['_id']))
-                        <div class="_uk-grid-margin uk-margin-small-top">
-                            <div class="uk-form-row">
-                                <strong class="uk-text-uppercase">bulkactions</strong>
-                                <div class="uk-margin-small-top">
-                                    <field-boolean label="@lang('Also create a User with the Groups name')" onclick="{ toggle_alsoCreateUser }" ></field-boolean>
+                        <div class="_uk-grid-margin uk-margin-small-top" ref="bulkactions">
+                            <strong class="uk-text-uppercase">bulkactions</strong>
+                            <div class="uk-grid uk-margin-top">
+                                <div class="uk-width-1-2 _uk-float-left uk-margin-small-top">
+                                    <field-boolean id="toggle_alsoCreateUser" label="@lang('Also create a User with the Groups name')" onclick="{ toggle_alsoCreateUser }" ></field-boolean>
+                                </div>
+                                <div class="uk-width-1-2 _uk-float-right">
+                                    <input class="_uk-width-1-1 uk-form-small" bind="group.password" type="text" placeholder="Password (if blank: password = username)" disabled>
                                 </div>
                             </div>
                         </div>
@@ -87,6 +90,7 @@
                                     <hr style="clear: both"/>
                                 </div>
                             </div>
+                            <!--
                             <div>
                                 <div class="uk-form-row">
                                     <div class="uk-margin-small-top">
@@ -101,6 +105,7 @@
                                     </div>
                                 </div>
                             </div>
+                            -->
                         </div>
                         @endif
 
@@ -170,15 +175,15 @@
             </div>
         </div>
         <div class="uk-form-row">
-            <strong class="uk-text-uppercase">regions</strong>
+            <strong class="uk-text-uppercase">singletons</strong>
             <div class="uk-margin-small-top">
-                <field-boolean bind="group.regions.create" label="@lang('Create')"></field-boolean>
+                <field-boolean bind="group.singletons.create" label="@lang('Create')"></field-boolean>
             </div>
             <div class="uk-margin-small-top">
-                <field-boolean bind="group.regions.delete" label="@lang('Delete')"></field-boolean>
+                <field-boolean bind="group.singletons.delete" label="@lang('Delete')"></field-boolean>
             </div>
             <div class="uk-margin-small-top">
-                <field-boolean bind="group.regions.manage" label="@lang('Manage')"></field-boolean>
+                <field-boolean bind="group.singletons.manage" label="@lang('Manage')"></field-boolean>
             </div>
         </div>
         <div class="uk-form-row">
@@ -193,18 +198,6 @@
                 <field-boolean bind="group.forms.manage" label="@lang('Manage')"></field-boolean>
             </div>
         </div>
-        <div class="uk-form-row">
-            <strong class="uk-text-uppercase">singletons</strong>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.singletons.create" label="@lang('Create')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.singletons.delete" label="@lang('Delete')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.singletons.manage" label="@lang('Manage')"></field-boolean>
-            </div>
-        </div>
 
     </div>
 
@@ -214,7 +207,7 @@
 
        this.mixin(RiotBindMixin);
 
-       this.group   = {{ json_encode(@$group) }};
+       this.group = {{ json_encode(@$group) }};
        this.collections = {{ json_encode(@$collections) }};
 
        this.selectedCollection = null;
@@ -225,7 +218,6 @@
 
            // bind clobal command + save
            Mousetrap.bindGlobal(['command+s', 'ctrl+s'], function(e) {
-
                e.preventDefault();
                $this.submit();
                return false;
@@ -237,7 +229,7 @@
 
        toggle_alsoCreateUser (e) {
            var alsoCreateUser = this.alsoCreateUser = !(this.alsoCreateUser);
-           $(App.$(this.refs.bulkactions).find('field-boolean, select')).each(function(){
+           $(App.$(this.refs.bulkactions).find('field-boolean, select, input').not('#toggle_alsoCreateUser')).each(function(){
                $(this).attr('disabled', !alsoCreateUser);
            });
        }
@@ -288,7 +280,7 @@
                     "i18n":"en",
                     "api_key":"account-"+App.Utils.generateToken(120),
                     "name":this.group.group,
-                    "password":this.group.group
+                    "password": this.group.password.trim().length > 0 ? this.group.password : this.group.group
                 };
                 App.request("/accounts/save", {"account": account}).then(function(data){
                     App.ui.notify("Account with Group-name created!", "success");

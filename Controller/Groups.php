@@ -44,7 +44,13 @@ class Groups extends \Cockpit\AuthController {
       // defaults for the creation of a new group
       $group = [
           'group' => '', // group name
-          //'vars' => ['' => ''],
+          'vars' => [
+              'finder.path' => '/storage',
+              'finder.allowed_uploads' => 10,
+              'assets.path' => '/storage/assets',
+              'assets.allowed_uploads' => 10,
+              'media.path' => '/storage/media'
+          ],
           'admin' => false,
           'cockpit' => [
               'finder' => true,
