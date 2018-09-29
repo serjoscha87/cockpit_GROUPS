@@ -8,6 +8,9 @@ _Sep 2018:_
   - when configuring ACLs the groups available will be shrinked to a smaller and less space using layout  
   - added singleton to group ACL config mask  
   - Now a group password can be set due the group creation "process"
+  - added some more ACLs for management of singletons
+  - added shrink view of group cards for singletons and collections
+  - when creating a new group now by default the group vars are set
 
 **Screenshot** (a bit outdated):
 
@@ -15,7 +18,7 @@ _Sep 2018:_
 
 ## Installation
 
-check this repository out to <your-docroot>/cockpit/addons/.
+put the "Groups" dir of this repository to < your-docroot >/cockpit/addons/.
 
 ## Other projects according to cockpit
 https://github.com/serjoscha87/cockpit_GroupBoundAssets
