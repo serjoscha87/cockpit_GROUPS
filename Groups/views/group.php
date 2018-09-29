@@ -180,6 +180,15 @@
                 <field-boolean bind="group.singletons.create" label="@lang('Create')"></field-boolean>
             </div>
             <div class="uk-margin-small-top">
+                <field-boolean bind="group.singletons.form" label="@lang('Form')"></field-boolean>
+            </div>
+            <div class="uk-margin-small-top">
+                <field-boolean bind="group.singletons.edit" label="@lang('Edit')"></field-boolean>
+            </div>
+            <div class="uk-margin-small-top">
+                <field-boolean bind="group.singletons.data" label="@lang('Data')"></field-boolean>
+            </div>
+            <div class="uk-margin-small-top">
                 <field-boolean bind="group.singletons.delete" label="@lang('Delete')"></field-boolean>
             </div>
             <div class="uk-margin-small-top">

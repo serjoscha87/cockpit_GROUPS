@@ -2,12 +2,11 @@
 /*
  * shorthand the path the the groups addon for later usage
  */
-$app->path('groups', 'addons/Groups/');
+$app->path('groups', __DIR__);
 
 // Auth Api extension
 $this->module("cockpit")->extend([
     "getGroups" => function() use($app) {
-
         $groups__all_fields = $this->app->storage->find("cockpit/groups"); // why the heck does ['fields' => ['...']] result in nothing more then the ID per row returned?!
         $groups = [];
         foreach ($groups__all_fields as $i => $row) {
