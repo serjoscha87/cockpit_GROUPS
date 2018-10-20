@@ -50,6 +50,9 @@ foreach ($groups_data as $i => $row) {
         }
     }
 }
+// ACL
+$actions = array_merge($app('acl')->getResources()['cockpit'],['groups']);
+$app('acl')->addResource('cockpit', $actions);
 
 // ADMIN
 if (COCKPIT_ADMIN && !COCKPIT_API_REQUEST) {

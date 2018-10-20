@@ -135,78 +135,17 @@
                 <field-boolean bind="group.admin" label="@lang('Admin')"></field-boolean>
             </div>
         </div>
+        
+        @foreach($app('acl')->getResources() as $module => $actions)
         <div class="uk-form-row">
-            <strong class="uk-text-uppercase">cockpit</strong>
+            <strong class="uk-text-uppercase">{{$module}}</strong>
+            @foreach($actions as $action)
             <div class="uk-margin-small-top">
-                <field-boolean bind="group.cockpit.backend" label="@lang('Backend')"></field-boolean>
+                <field-boolean bind="group.{{ $module }}.{{ $action }}" label="{{ $app("i18n")->get(ucfirst($action)) }}"></field-boolean>
             </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.cockpit.accounts" label="@lang('Accounts')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.cockpit.groups" label="@lang('Groups')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.cockpit.finder" label="@lang('Finder')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.cockpit.settings" label="@lang('Settings')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.cockpit.rest" label="@lang('RestAPI')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.cockpit.webhooks" label="@lang('Webhooks')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.cockpit.info" label="@lang('SysInfo')"></field-boolean>
-            </div>
+            @endforeach
         </div>
-        <div class="uk-form-row">
-            <strong class="uk-text-uppercase">collections</strong>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.collections.create" label="@lang('Create')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.collections.delete" label="@lang('Delete')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.collections.manage" label="@lang('Manage')"></field-boolean>
-            </div>
-        </div>
-        <div class="uk-form-row">
-            <strong class="uk-text-uppercase">singletons</strong>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.singletons.create" label="@lang('Create')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.singletons.form" label="@lang('Form')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.singletons.edit" label="@lang('Edit')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.singletons.data" label="@lang('Data')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.singletons.delete" label="@lang('Delete')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.singletons.manage" label="@lang('Manage')"></field-boolean>
-            </div>
-        </div>
-        <div class="uk-form-row">
-            <strong class="uk-text-uppercase">forms</strong>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.forms.create" label="@lang('Create')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.forms.delete" label="@lang('Delete')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.forms.manage" label="@lang('Manage')"></field-boolean>
-            </div>
-        </div>
+        @endforeach
 
     </div>
 
