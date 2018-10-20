@@ -5,9 +5,12 @@
 $app->path('groups', __DIR__);
 
 // Auth Api extension
-$this->module("cockpit")->extend([
-    "getGroups" => function() use($app) {
-        $groups__all_fields = $this->app->storage->find("cockpit/groups"); // why the heck does ['fields' => ['...']] result in nothing more then the ID per row returned?!
+$this->module('cockpit')->extend([
+
+    'getGroups' => function() {
+
+        $groups__all_fields = $this->app->storage->find('cockpit/groups', ['fields' => ['group' => true, '_id' => false]]);
+
         $groups = [];
         foreach ($groups__all_fields as $i => $row) {
             $groups[] = $row['group'];
@@ -16,13 +19,14 @@ $this->module("cockpit")->extend([
         $groups = array_merge(['admin'], $groups);
 
         return array_unique($groups);
+
     }
 ]);
 
 /*
  * extend groups/acls by db data
  */
-$groups_data = $app->storage->find("cockpit/groups");
+$groups_data = $app->storage->find('cockpit/groups');
 foreach ($groups_data as $i => $row) {
     $isSuperAdmin = isset($row['admin']) ? $row['admin'] : false;
     $vars = isset($row['vars']) ? $row['vars'] : [];
