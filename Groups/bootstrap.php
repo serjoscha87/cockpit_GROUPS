@@ -27,6 +27,14 @@ foreach ($groups_data as $i => $row) {
     $isSuperAdmin = isset($row['admin']) ? $row['admin'] : false;
     $vars = isset($row['vars']) ? $row['vars'] : [];
 
+    $vars_data = $vars;
+
+    array_walk($vars_data, function ($value, $key) use (&$vars) {
+      unset($vars[$key]);
+      $key = \str_replace('__', '.', $key);
+      $vars[$key] = $value;
+    });
+
     $group_name = $row['group'];
 
     // add the group its self

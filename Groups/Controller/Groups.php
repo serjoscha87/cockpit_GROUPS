@@ -32,6 +32,14 @@ class Groups extends \Cockpit\AuthController {
          return false;
       }
 
+      $vars = $group['vars'];
+
+      array_walk($vars, function ($value, $key) use (&$group) {
+        unset($group['vars'][$key]);
+        $key = \str_replace('__', '.', $key);
+        $group['vars'][$key] = $value;
+      });
+
       $fields = $this->app->retrieve('config/groups/fields', null);
 
       return $this->render('groups:views/group.php', compact('group', 'gid', 'fields'));
@@ -72,6 +80,14 @@ class Groups extends \Cockpit\AuthController {
          if (!isset($data['_id'])) {
             $data["_created"] = $data["_modified"];
          }
+
+         $vars = $data['vars'];
+
+         array_walk($vars, function ($value, $key) use (&$data) {
+           unset($data['vars'][$key]);
+           $key = \str_replace('.', '__', $key);
+           $data['vars'][$key] = $value;
+         });
 
          $this->app->storage->save("cockpit/groups", $data);
 
