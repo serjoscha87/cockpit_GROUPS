@@ -4,6 +4,9 @@ Cockpit: https://github.com/agentejo/cockpit
 
 **Changelog**
 
+_Feb 2019:_ 
+  - Now there is a "MongoDB Patch" branch (https://github.com/serjoscha87/cockpit_GROUPS/tree/mongodb-patch). Thanks to panosru.
+
 _Sep 2018:_  
   - when configuring ACLs the groups available will be shrinked to a smaller and less space using layout  
   - added singleton to group ACL config mask  
