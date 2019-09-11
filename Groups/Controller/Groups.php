@@ -4,113 +4,118 @@ namespace Cockpit\Controller;
 
 class Groups extends \Cockpit\AuthController {
 
-   public function index() {
+    public function index() {
 
-      if (!$this->module('cockpit')->hasaccess('cockpit', 'groups')) {
-         return $this->helper('admin')->denyRequest();
-      }
+        if (!$this->module('cockpit')->hasaccess('cockpit', 'groups')) {
+            return $this->helper('admin')->denyRequest();
+        }
 
-      $current = $this->user["_id"];
-      $groups = $this->module('cockpit')->getGroups();
+        $current = $this->user["_id"];
+        $groups = $this->module('cockpit')->getGroups();
 
-      return $this->render('groups:views/index.php', compact('current', 'groups'));
-   }
+        return $this->render('groups:views/index.php', compact('current', 'groups'));
+    }
 
-   public function group($gid = null) {
+    public function info() {
+        return $this->render('groups:views/info.php', ['markdown' => $this->module('cockpit')->markdown]);
+    }
 
-      if (!$gid) {
-         $gid = $this->group["_id"];
-      }
+    public function group($gid = null) {
 
-      if (!$this->module('cockpit')->hasaccess('cockpit', 'groups')) {
-         return $this->helper('admin')->denyRequest();
-      }
+        if (!$gid) {
+            $gid = $this->group["_id"];
+        }
 
-      $group = $this->app->storage->findOne("cockpit/groups", ["_id" => $gid]);
+        if (!$this->module('cockpit')->hasaccess('cockpit', 'groups')) {
+            return $this->helper('admin')->denyRequest();
+        }
 
-      if (!$group) {
-         return false;
-      }
+        $group = $this->app->storage->findOne("cockpit/groups", ["_id" => $gid]);
 
-      $fields = $this->app->retrieve('config/groups/fields', null);
+        if (!$group) {
+            return false;
+        }
 
-      return $this->render('groups:views/group.php', compact('group', 'gid', 'fields'));
-   }
+        $fields = $this->app->retrieve('config/groups/fields', null);
 
-   public function create() {
+        return $this->render('groups:views/group.php', compact('group', 'gid', 'fields'));
+    }
 
-      $collections = $this->module('collections')->collections();
+    public function create() {
 
-      // defaults for the creation of a new group
-      $group = [
-          'group' => '', // group name
-          'password' => '',
-          'vars' => [
-              'finder.path' => '/storage',
-              'finder.allowed_uploads' => 10,
-              'assets.path' => '/storage/assets',
-              'assets.allowed_uploads' => 10,
-              'media.path' => '/storage/media'
-          ],
-          'admin' => false,
-          'cockpit' => [
-              'finder' => true,
-              'rest' => true,
-              'backend' => true
-          ]
-      ];
+        $collections = $this->module('collections')->collections();
 
-      return $this->render('groups:views/group.php', compact('group', 'collections'));
-   }
+        // defaults for the creation of a new group
+        $group = [
+            'group' => '', // group name
+            'password' => '',
+            'vars' => [
+                'finder.path' => '/storage',
+                'finder.allowed_uploads' => 10,
+                'assets.path' => '/storage/assets',
+                'assets.allowed_uploads' => 10,
+                'assets.max_upload_size' => 5,
+                'media.path' => '/storage/media'
+            ],
+            'admin' => false,
+            'cockpit' => [
+                'finder' => true,
+                'rest' => true,
+                'backend' => true
+            ]
+        ];
 
-   public function save() {
+        return $this->render('groups:views/group.php', compact('group', 'collections'));
+    }
 
-      if ($data = $this->param("group", false)) {
+    public function save() {
 
-         $data["_modified"] = time();
+        if ($data = $this->param("group", false)) {
 
-         if (!isset($data['_id'])) {
-            $data["_created"] = $data["_modified"];
-         }
+            $data["_modified"] = time();
 
-         $this->app->storage->save("cockpit/groups", $data);
+            if (!isset($data['_id'])) {
+                $data["_created"] = $data["_modified"];
+            }
 
-         return json_encode($data);
-      }
+            $this->app->storage->save("cockpit/groups", $data);
 
-      return false;
-   }
+            return json_encode($data);
+        }
 
-   public function remove() {
+        return false;
+    }
 
-      if ($data = $this->param("group", false)) {
+    public function remove() {
 
-         // can't delete own group
-         if ($data["_id"] != $this->user["_id"]) {
+        if ($data = $this->param("group", false)) {
 
-            $this->app->storage->remove("cockpit/groups", ["_id" => $data["_id"]]);
+            // can't delete own group
+            if ($data["_id"] != $this->user["_id"]) {
 
-            return '{"success":true}';
-         }
-      }
+                $this->app->storage->remove("cockpit/groups", ["_id" => $data["_id"]]);
 
-      return false;
-   }
+                return '{"success":true}';
+            }
+        }
 
-   public function find() {
+        return false;
+    }
 
-      $options = $this->param('options', []);
+    public function find() {
 
-      $groups = $this->storage->find("cockpit/groups", $options)->toArray(); // get groups from db
-      $count = (!isset($options['skip']) && !isset($options['limit'])) ? count($groups) : $this->storage->count("cockpit/groups", isset($options['filter']) ? $options['filter'] : []);
-      $pages = isset($options['limit']) ? ceil($count / $options['limit']) : 1;
-      $page = 1;
+        $options = $this->param('options', []);
 
-      if ($pages > 1 && isset($options['skip'])) {
-         $page = ceil($options['skip'] / $options['limit']) + 1;
-      }
+        $groups = $this->storage->find("cockpit/groups", $options)->toArray(); // get groups from db
+        $count = (!isset($options['skip']) && !isset($options['limit'])) ? count($groups) : $this->storage->count("cockpit/groups", isset($options['filter']) ? $options['filter'] : []);
+        $pages = isset($options['limit']) ? ceil($count / $options['limit']) : 1;
+        $page = 1;
 
-      return compact('groups', 'count', 'pages', 'page');
-   }
+        if ($pages > 1 && isset($options['skip'])) {
+            $page = ceil($options['skip'] / $options['limit']) + 1;
+        }
+
+        return compact('groups', 'count', 'pages', 'page');
+    }
 
 }

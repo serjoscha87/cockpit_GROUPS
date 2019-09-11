@@ -4,6 +4,13 @@ Cockpit: https://github.com/agentejo/cockpit
 
 **Changelog**
 
+_11th Sep 2019:_ 
+  - Updated for the most current cockpit version **as of today** (commit cef5ee6c16d780b81ba3edc0b4a18129de3452fe)
+    - added one new var ("media.path") in the group creation form
+    - "Also create" ... now works again (including the password field)
+    - "Also create a Collection..." got the possibility to set the new/duped collection's name 
+    - Addon now integrates with the new cockpit menu
+
 _Feb 2019:_ 
   - Now there is a "MongoDB Patch" branch (https://github.com/serjoscha87/cockpit_GROUPS/tree/mongodb-patch). Thanks to panosru.
 

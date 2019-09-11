@@ -46,9 +46,9 @@ $app->on('cockpit.search', function($search, $list) {
 /*
  * add menu entry if the user has access to group stuff
  */
-$this->on('cockpit.menu.aside', function() {
+$this->on('cockpit.menu', function() {
     if ($this->module('cockpit')->hasaccess('cockpit', 'groups')) {
-        $this->renderView("groups:views/partials/menu.php");
+        $this->renderView("groups:views/partials/menu.php", ['module' => $this->module('groups')]);
     }
 });
 

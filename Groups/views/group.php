@@ -9,24 +9,17 @@
 </div>
 
 <div class="uk-grid uk-margin-top uk-invisible" data-uk-grid-margin riot-view>
-
     <div class="uk-width-medium-2-3">
-
         <div class="uk-panel">
-
             <div class="uk-grid" data-uk-grid-margin>
-
                 <div class="uk-width-medium-1-1">
-
-                    <form id="account-form" class="uk-form" onsubmit="{ submit }">
-
+                    <form id="groups-form" class="uk-form" onsubmit="{ submit }">
                         <div>
                             <div class="uk-form-row">
                                 <label class="uk-text-small">@lang('Group Name')</label>
                                 <input class="uk-width-1-1 uk-form-large" type="text" placeholder="@lang('Group Name')" bind="group.group" required>
                             </div>
                         </div>
-
                         <div class="_uk-grid-margin uk-margin-small-top">
                             <strong class="uk-text-uppercase">vars</strong>
                             <button type="button" onclick="{ dupe_var_row }" class="uk-button uk-button-small uk-button-success uk-float-right uk-margin-small-top uk-margin-small-bottom">+</button>
@@ -68,10 +61,10 @@
                             <strong class="uk-text-uppercase">bulkactions</strong>
                             <div class="uk-grid uk-margin-top">
                                 <div class="uk-width-1-2 _uk-float-left uk-margin-small-top">
-                                    <field-boolean id="toggle_alsoCreateUser" label="@lang('Also create a User with the Groups name')" onclick="{ toggle_alsoCreateUser }" ></field-boolean>
+                                    <field-boolean id="toggle_alsoCreateUser" bind="alsoCreateUser" label="@lang('Also create a User with the Groups name')" ></field-boolean>
                                 </div>
                                 <div class="uk-width-1-2 _uk-float-right">
-                                    <input class="_uk-width-1-1 uk-form-small" bind="group.password" type="text" placeholder="Password (if blank: password = username)" disabled>
+                                    <input class="_uk-width-1-1 uk-form-small" bind="group.password" type="text" placeholder="Password (if blank: password = username)" disabled="{ !alsoCreateUser }">
                                 </div>
                             </div>
                         </div>
@@ -79,33 +72,20 @@
                             <div class="uk-grid-margin">
                                 <div class="uk-form-row">
                                     <div class="uk-float-left">
-                                        <field-boolean label="@lang('Also create a Collection for the fresh User')" onclick="{ toggle_alsoCreateCollection }" disabled ></field-boolean>
+                                        <field-boolean bind="alsoCreateCollection" label="@lang('Also create a Collection for the fresh User')" disabled="{ !alsoCreateUser }" ></field-boolean>
                                     </div>
                                     <div class="uk-float-right">
-                                        <select onchange="{ updateSelectedCollection }" ref="collections" disabled>
+                                        <select onchange="{ updateSelectedCollection }" ref="collections" disabled="{ !alsoCreateCollection }">
                                             <option value="-1">@lang('Choose a Collection as Template')</option>
                                             <option value="{c.name}" each="{c in collections}">{c.label} ({c.name})</option>
                                         </select>
+                                        @lang('with name'):
+                                        <input class="uk-form-small only-alpha-a-digets" bind="selectedCollectionDupeName" type="text" placeholder="my_collection_dupe"
+                                               disabled="{ selectedCollection == -1 || selectedCollection === null }">
                                     </div>
                                     <hr style="clear: both"/>
                                 </div>
                             </div>
-                            <!--
-                            <div>
-                                <div class="uk-form-row">
-                                    <div class="uk-margin-small-top">
-                                        <field-boolean label="@lang('Also create a Region for the fresh User (NYI)')" disabled ></field-boolean>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="uk-form-row">
-                                    <div class="uk-margin-small-top">
-                                        <field-boolean label="@lang('Also create a Form for the fresh User (NYI)')" disabled ></field-boolean>
-                                    </div>
-                                </div>
-                            </div>
-                            -->
                         </div>
                         @endif
 
@@ -117,12 +97,9 @@
                         </div>
 
                     </form>
-
                 </div>
-
             </div>
         </div>
-
     </div>
 
     <div class="uk-width-medium-1-4 uk-form">
@@ -180,15 +157,6 @@
                 <field-boolean bind="group.singletons.create" label="@lang('Create')"></field-boolean>
             </div>
             <div class="uk-margin-small-top">
-                <field-boolean bind="group.singletons.form" label="@lang('Form')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.singletons.edit" label="@lang('Edit')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
-                <field-boolean bind="group.singletons.data" label="@lang('Data')"></field-boolean>
-            </div>
-            <div class="uk-margin-small-top">
                 <field-boolean bind="group.singletons.delete" label="@lang('Delete')"></field-boolean>
             </div>
             <div class="uk-margin-small-top">
@@ -220,6 +188,10 @@
        this.collections = {{ json_encode(@$collections) }};
 
        this.selectedCollection = null;
+       this.selectedCollectionDupeName = null;
+
+       this.alsoCreateUser = false;
+       this.alsoCreateCollection = false;
 
        this.on('mount', function(){
 
@@ -234,18 +206,14 @@
 
            $this.update();
 
-       });
-
-       toggle_alsoCreateUser (e) {
-           var alsoCreateUser = this.alsoCreateUser = !(this.alsoCreateUser);
-           $(App.$(this.refs.bulkactions).find('field-boolean, select, input').not('#toggle_alsoCreateUser')).each(function(){
-               $(this).attr('disabled', !alsoCreateUser);
+           // jquery helper to force some special imput style
+           $('.only-alpha-a-digets').keyup(function(e) {
+               var regex = /^[a-zA-Z0-9_]+$/;
+               if (regex.test(this.value) !== true)
+                   this.value = this.value.replace(/[^a-zA-Z0-9_]+/, '');
            });
-       }
 
-       toggle_alsoCreateCollection(e) {
-           this.alsoCreateCollection = !(this.alsoCreateCollection);
-       }
+       });
 
        updateSelectedCollection(e) {
            // collection => template
@@ -253,8 +221,6 @@
        }
 
        dupe_var_row (e) {
-           //$(App.$(this.refs.vars)).find('.var-row').eq(0).clone().appendTo($(App.$(this.refs.vars))).find('input, i.uk-icon-trash').val('').removeClass('uk-hidden');
-           //$(App.$(this.refs.vars)).find('.var-row').eq(0).clone().appendTo($(App.$(this.refs.vars))).find('input, i.uk-icon-trash').val('');
            $('.var-row.uk-hidden').clone().removeClass('uk-hidden').appendTo($(App.$(this.refs.vars)));
        }
 
@@ -299,23 +265,24 @@
            if(this.alsoCreateCollection && this.selectedCollection) {
                // this.selectedCollection // < the collection that shall be used as template for the new collection
                var group = this.group.group;
+               var selectedCollectionDupeName = this.selectedCollectionDupeName;
                App.callmodule('collections:collection', [this.selectedCollection]).then(function(data) {
                   var acl = {};
                   acl[group] = {"collection_edit":true,"entries_view":true,"entries_edit":true,"entries_create":true,"entries_delete":true};
                   var slug_group_name = App.Utils.sluggify(group, {"delimiter" : ''});
                   var data = {
-                    'name' : slug_group_name,
-                    'label' : group,
+                    'name' : collection_name = selectedCollectionDupeName !== null && selectedCollectionDupeName.trim() !== '' ? selectedCollectionDupeName : slug_group_name,
+                    'label' : collection_name,
                     'fields' : data.result.fields,
                     'acl' : acl
                   };
-                  App.callmodule('collections:createCollection', [slug_group_name, data]).then(function(data) {
+                  App.callmodule('collections:createCollection', [collection_name, data]).then(function(data) {
                      App.ui.notify("Collection for the fresh new user created", "success");
                   });
                });
            }
 
-           return false;
+           return false; 
        }
 
    </script>

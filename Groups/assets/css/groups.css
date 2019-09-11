@@ -43,3 +43,7 @@ field-boolean[disabled] {
 body.singleton .shrinkable-group svg {
     max-width: 30px;
 }
+
+form#groups-form.uk-form input[type="text"]:disabled {
+    opacity: 0.2;
+}
