@@ -29,7 +29,7 @@ _Sep 2018:_
 
 **Screenshot** (a bit outdated):
 
-![Groups Management UI Addon for Cockpit](https://raw.githubusercontent.com/serjoscha87/cockpit_GROUPS/7d6c2f807602186f785ffdb7b064fce62dbffc06/cockpit_groups.jpg)
+![Groups Management UI Addon for Cockpit](https://raw.githubusercontent.com/serjoscha87/cockpit_GROUPS/4512ca5915f28b8fc057a73b5dbc599105d81042/groups_addon.jpg)
 
 ## Installation
 
