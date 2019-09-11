@@ -27,7 +27,7 @@ _Sep 2018:_
   - added shrink view of group cards for singletons and collections
   - when creating a new group now by default the group vars are set
 
-**Screenshot** (a bit outdated):
+**Screenshot**:
 
 ![Groups Management UI Addon for Cockpit](https://raw.githubusercontent.com/serjoscha87/cockpit_GROUPS/4512ca5915f28b8fc057a73b5dbc599105d81042/groups_addon.jpg)
 
