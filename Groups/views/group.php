@@ -37,13 +37,16 @@
                             </div>
                             <div class="uk-width-1-1 uk-margin-top" ref="vars">
                                 @if(isset($group['vars']))
-                                    @foreach( $group['vars'] as $key => $val)
+                                    @foreach( $group['vars'] as $i => $set)
                                     <div class="uk-panel uk-panel-box uk-panel-card var-row uk-margin-small-bottom">
                                         <div class="uk-grid uk-grid-small">
                                             <div class="uk-flex-item-1 uk-flex">
-                                                <input class="uk-width-1-4 uk-form-small" type="text" placeholder="key" value="{{$key}}"><!-- TODO JB: perhaps create autocomplete for valid keys (jquery ui style) -->
+                                                <input class="uk-width-1-4 uk-form-small" type="text" placeholder="key" value="{{$set['key']}}"><!-- TODO JB: perhaps create autocomplete for valid keys (jquery ui style) -->
                                                 <i class="uk-width-1-4 uk-text-center uk-icon-arrows-h"></i>
-                                                <input class="uk-width-1-4 uk-form-small" type="text" placeholder="value" value="{{$val}}">
+                                                <input class="uk-width-1-4 uk-form-small" type="text" placeholder="value" value="{{$set['val']}}">
+                                                @if(isset($set['info']) && !empty($set['info']))
+                                                    <span class="uk-icon-info group-addon-info-icon-mod" title="{{$set['info']}}"></span>
+                                                @endif
                                                 <div class="uk-width-1-4 uk-text-right">
                                                     <i class="uk-icon-trash" style="cursor: pointer" onclick="$(this).parents('.var-row').remove()"></i>
                                                 </div>
@@ -213,6 +216,11 @@
                    this.value = this.value.replace(/[^a-zA-Z0-9_]+/, '');
            });
 
+           // init uikit tooltips
+           $('.uk-icon-info').each(function(){
+               UIkit.tooltip($(this))
+           });
+
        });
 
        updateSelectedCollection(e) {
@@ -282,7 +290,7 @@
                });
            }
 
-           return false; 
+           return false;
        }
 
    </script>

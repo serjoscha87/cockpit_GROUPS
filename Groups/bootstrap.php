@@ -1,5 +1,4 @@
 <?php
-
 /*
  * shorthand the path the the groups addon for later usage
  */

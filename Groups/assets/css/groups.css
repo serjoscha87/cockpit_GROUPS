@@ -47,3 +47,13 @@ body.singleton .shrinkable-group svg {
 form#groups-form.uk-form input[type="text"]:disabled {
     opacity: 0.2;
 }
+
+.group-addon-info-icon-mod {
+    border: 1px solid grey;
+    border-radius: 100%;
+    display: inline-block;
+    width: 20px;
+    height: 18px;
+    text-align: center;
+    padding-top: 5px;
+}

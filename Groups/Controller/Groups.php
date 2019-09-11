@@ -50,12 +50,36 @@ class Groups extends \Cockpit\AuthController {
             'group' => '', // group name
             'password' => '',
             'vars' => [
-                'finder.path' => '/storage',
-                'finder.allowed_uploads' => 10,
-                'assets.path' => '/storage/assets',
-                'assets.allowed_uploads' => 10,
-                'assets.max_upload_size' => 5,
-                'media.path' => '/storage/media'
+                [
+                    'key' => 'finder.path',
+                    'val' => '/storage',
+                    'info' => null
+                ],
+                [
+                    'key' => 'finder.allowed_uploads',
+                    'val' => '*',
+                    'info' => $file_extensions_info_text = 'list of file extensions like so: >>jpg jpeg png<< (without the brackets). Using asterisk (*) enables ALL fileextensions'
+                ],
+                [
+                    'key' => 'assets.path',
+                    'val' => '/storage/assets',
+                    'info' => null
+                ],
+                [
+                    'key' => 'assets.allowed_uploads',
+                    'val' => '*',
+                    'info' => $file_extensions_info_text
+                ],
+                [
+                    'key' => 'assets.max_upload_size',
+                    'val' => 0,
+                    'info' => 'Maximum size for the file in BYTES (0 = no limit)'
+                ],
+                [
+                    'key' => 'media.path',
+                    'val' => '/storage/media',
+                    'info' => null
+                ]
             ],
             'admin' => false,
             'cockpit' => [
