@@ -2,6 +2,11 @@
 
 Cockpit: https://github.com/agentejo/cockpit
 
+**NOTE:** I've updated this addon to work with cockpit versions AFTER the big menu overhaul.
+If you are running an older cockpit installation BEFORE that menu overhaul you might want to install an older version of this addon. 
+You can get it here: https://github.com/serjoscha87/cockpit_GROUPS/releases/tag/v1.0
+Please note that this old version won't be supplied with fixes. You are better off updating cockpit to the latest release.
+
 **Changelog**
 
 _11th Sep 2019:_ 
