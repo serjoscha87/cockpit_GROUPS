@@ -1,3 +1,7 @@
+<?php
+use Cockpit\Controller\Groups;
+?>
+
 <div>
     <ul class="uk-breadcrumb">
         @hasaccess?('cockpit', 'groups')
@@ -37,21 +41,21 @@
                             </div>
                             <div class="uk-width-1-1 uk-margin-top" ref="vars">
                                 @if(isset($group['vars']))
-                                    @foreach( $group['vars'] as $i => $set)
+                                    @foreach($group['vars'] as $var_key => $var_val)
                                     <div class="uk-panel uk-panel-box uk-panel-card var-row uk-margin-small-bottom">
                                         <div class="uk-grid uk-grid-small">
-                                            <div class="uk-flex-item-1 uk-flex">
-                                                <input class="uk-width-1-4 uk-form-small" type="text" placeholder="key" value="{{$set['key']}}"><!-- TODO JB: perhaps create autocomplete for valid keys (jquery ui style) -->
-                                                <i class="uk-width-1-4 uk-text-center uk-icon-arrows-h"></i>
-                                                <input class="uk-width-1-4 uk-form-small" type="text" placeholder="value" value="{{$set['val']}}">
-                                                @if(isset($set['info']) && !empty($set['info']))
-                                                    <span class="uk-icon-info group-addon-info-icon-mod" title="{{$set['info']}}"></span>
-                                                @endif
-                                                <div class="uk-width-1-4 uk-text-right">
+                                            <div class="uk-flex-item-1 uk-flex" id="group-settings-grid">
+                                                <input class="__uk-width-1-4 uk-form-small" type="text" placeholder="key" value="{{$var_key}}" >
+                                                <i class="__uk-width-1-4 uk-text-center uk-icon-arrows-h"></i>
+                                                <input class="__uk-width-1-4 uk-form-small" type="text" placeholder="value" value="{{$var_val}}">
+                                                <div class="__uk-width-1-4 uk-text-right">
                                                     <i class="uk-icon-trash" style="cursor: pointer" onclick="$(this).parents('.var-row').remove()"></i>
                                                 </div>
                                             </div>
                                         </div>
+                                        @if(($info=Groups::getGroupVarInfo($var_key)) !== null)
+                                            <span class="uk-icon-info group-addon-info-icon-mod" title="{{$info}}"></span>
+                                        @endif
                                     </div>
                                     @endforeach
                                 @endif
@@ -94,9 +98,23 @@
 
                         @trigger('cockpit.groups.editview')
 
-                        <div class="uk-margin-large-top">
+                        <div class="__uk-margin-large-top">
                             <button class="uk-button uk-button-large uk-button-primary uk-width-1-3 uk-margin-right">@lang('Save')</button>
                             <a href="@route('/groups')">@lang('Cancel')</a>
+                        </div>
+                      
+                        <hr class="uk-margin-large-top" />
+                        
+                        <a href="javascript:;" onclick={toggleInfo}>
+                            » <strong class="uk-text-uppercase">Some possible key / val (example) Settings for the fields above</strong>
+                        </a>
+                        <div class="uk-margin-small-top" ref="info-table">
+                            <table class="uk-table">
+                                <tr><th>Key</th><th>Recommended val</th><th>Info</th></tr>                                
+                                @foreach(Groups::getGroupVars() as $var_key => $var_val)
+                                    <tr><td>{{$var_key}}</td><td>{{$var_val}}</td><td>{{Groups::getGroupVarInfo($var_key) ?? '-'}}</td></tr>
+                                @endforeach
+                            </table>
                         </div>
 
                     </form>
@@ -143,7 +161,7 @@
             </div>
         </div>
         <div class="uk-form-row">
-            <strong class="uk-text-uppercase">collections</strong>
+            <strong class="uk-text-uppercase">collections <small>(global)</small></strong>
             <div class="uk-margin-small-top">
                 <field-boolean bind="group.collections.create" label="@lang('Create')"></field-boolean>
             </div>
@@ -155,7 +173,7 @@
             </div>
         </div>
         <div class="uk-form-row">
-            <strong class="uk-text-uppercase">singletons</strong>
+            <strong class="uk-text-uppercase">singletons <small>(global)</small></strong>
             <div class="uk-margin-small-top">
                 <field-boolean bind="group.singletons.create" label="@lang('Create')"></field-boolean>
             </div>
@@ -167,7 +185,7 @@
             </div>
         </div>
         <div class="uk-form-row">
-            <strong class="uk-text-uppercase">forms</strong>
+            <strong class="uk-text-uppercase">forms <small>(global)</small></strong>
             <div class="uk-margin-small-top">
                 <field-boolean bind="group.forms.create" label="@lang('Create')"></field-boolean>
             </div>
@@ -178,8 +196,16 @@
                 <field-boolean bind="group.forms.manage" label="@lang('Manage')"></field-boolean>
             </div>
         </div>
+        
+        <div class="uk-form-row">
+            <small style="color: #ccc">
+                Remember that in most cases its not necessary to grant global permissions to groups on collections etc. Instead of granting global permissions, better grant access to groups per collection ACL.
+            </small>
+        </div>
 
     </div>
+    
+    @render("groups:views/partials/github-footer.php")
 
    <script type="view/script">
 
@@ -195,6 +221,8 @@
 
        this.alsoCreateUser = false;
        this.alsoCreateCollection = false;
+       
+       //this.infoOpen = false; // for the settings var info table
 
        this.on('mount', function(){
 
@@ -220,12 +248,19 @@
            $('.uk-icon-info').each(function(){
                UIkit.tooltip($(this))
            });
+           
+           $(this.refs['info-table']).hide();
 
        });
 
        updateSelectedCollection(e) {
            // collection => template
            this.selectedCollection = $(App.$(this.refs.collections)).val();
+       }
+       
+       toggleInfo(e) {
+           //this.infoOpen = !this.infoOpen
+           $(this.refs['info-table']).slideToggle();
        }
 
        dupe_var_row (e) {

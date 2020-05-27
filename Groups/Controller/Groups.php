@@ -49,38 +49,7 @@ class Groups extends \Cockpit\AuthController {
         $group = [
             'group' => '', // group name
             'password' => '',
-            'vars' => [
-                [
-                    'key' => 'finder.path',
-                    'val' => '/storage',
-                    'info' => null
-                ],
-                [
-                    'key' => 'finder.allowed_uploads',
-                    'val' => '*',
-                    'info' => $file_extensions_info_text = 'list of file extensions like so: >>jpg jpeg png<< (without the brackets). Using asterisk (*) enables ALL fileextensions'
-                ],
-                [
-                    'key' => 'assets.path',
-                    'val' => '/storage/assets',
-                    'info' => null
-                ],
-                [
-                    'key' => 'assets.allowed_uploads',
-                    'val' => '*',
-                    'info' => $file_extensions_info_text
-                ],
-                [
-                    'key' => 'assets.max_upload_size',
-                    'val' => 0,
-                    'info' => 'Maximum size for the file in BYTES (0 = no limit)'
-                ],
-                [
-                    'key' => 'media.path',
-                    'val' => '/storage/media',
-                    'info' => null
-                ]
-            ],
+            'vars' => self::getGroupVars(),
             'admin' => false,
             'cockpit' => [
                 'finder' => true,
@@ -140,6 +109,25 @@ class Groups extends \Cockpit\AuthController {
         }
 
         return compact('groups', 'count', 'pages', 'page');
+    }
+    
+    public static function getGroupVars() : array {
+        return [
+            'finder.path'               =>'/storage',
+            'finder.allowed_uploads'    => '*',
+            'assets.path'               => '/storage/assets',
+            'assets.allowed_uploads'    => '*',
+            'assets.max_upload_size'    => '0',
+            'media.path'                => '/storage/media'
+        ];
+    }
+    
+    public static function getGroupVarInfo($key) {
+        return [
+            'finder.allowed_uploads' => $file_extensions_info_text = 'list of file extensions like so: »jpg jpeg png« (without the quotes & without comma). Using asterisk (*) enables ALL fileextensions',
+            'assets.allowed_uploads' => $file_extensions_info_text,
+            'assets.max_upload_size' => 'Maximum size per file in BYTES (0 = no limit)',
+        ][$key] ?? null;
     }
 
 }

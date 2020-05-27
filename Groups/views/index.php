@@ -15,7 +15,7 @@
             <input type="text" class="uk-form-large uk-form-blank" ref="txtfilter" placeholder="@lang('Filter by name...')" onchange="{ updatefilter }">
         </span>
 
-        <div class="uk-form-select">
+        <!--<div class="uk-form-select">
             <span class="uk-button uk-button-outline uk-text-uppercase {(aclfilter != '_all' && 'uk-text-primary') || 'uk-text-muted'}">
                 <i class="uk-icon-group"></i> {filterGroup == '_all' ? App.i18n.get('All') : filterGroup }
             </span>
@@ -23,7 +23,7 @@
                 <option value="_all">@lang('All')</option>
                 <option value="{acl}" each="{acl in acls}">{acl}</option>
             </select>
-        </div>
+        </div>-->
 
         <div class="uk-float-right">
             <a class="uk-button uk-button-primary uk-button-large" href="@route('/groups/create')">
@@ -147,6 +147,8 @@
         </div>
 
     </div>
+    
+    @render("groups:views/partials/github-footer.php")
 
     <script type="view/script">
 

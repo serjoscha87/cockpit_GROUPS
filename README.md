@@ -9,6 +9,16 @@ Please note that this old version won't be supplied with fixes. You are better o
 
 **Changelog**
 
+_27th May 2020:_ 
+  - Finally fixed https://github.com/serjoscha87/cockpit_GROUPS/issues/11 (so now you are able (again) to edit group's settings/config vars)
+  - ... and made some more improvements:
+    - removed the "info" tile-button + page from the navigation overlay (the git info is now placed down at the end of the groups-addon page)
+    - added a new information table in the creator / editor view for groups. This table described some possible config values, their default values / recommended values & a small description for some fields
+    - made the layout of group-editor/creator view a bit more fluent
+    - added some more text-notes for all you out there struggeling with groups & ACLs
+    - removed the filter dropdown at the group overview for its not used yet
+    - addon-navigation-tile highlighting now works 
+
 _11th Sep 2019:_ 
   - Updated for the most current cockpit version **as of today** (commit cef5ee6c16d780b81ba3edc0b4a18129de3452fe)
     - added one new var ("media.path") in the group creation form

@@ -51,9 +51,28 @@ form#groups-form.uk-form input[type="text"]:disabled {
 .group-addon-info-icon-mod {
     border: 1px solid grey;
     border-radius: 100%;
-    display: inline-block;
-    width: 20px;
-    height: 18px;
+    display: flex;
+    width: 22px;
+    height: 22px;
     text-align: center;
-    padding-top: 5px;
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.22);
+}
+
+#group-settings-grid {
+    align-items: center;
+    justify-content: space-between;
+}
+#group-settings-grid > input {
+    flex: auto;
+}
+#group-settings-grid > *:not(input) {
+    flex: 1;
+    padding: 0 8px;
 }

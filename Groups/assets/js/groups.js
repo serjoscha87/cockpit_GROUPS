@@ -2,7 +2,7 @@
 
     /*
      * Hack: on clicking the "premission" tab within a collection configuration: add a class to all group-permission container-cards
-     * in order of being able to shrink them to a reduced layout/size
+     * in order of being able to shrink them to a reduced layout/size (by adding a css-class)
      */
     if(page=window.location.href.match('(collections/collection|singletons/singleton)')) {
         $(document).on('click', 'a[data-tab="auth"], li[data-view="acl"]' , function(){
