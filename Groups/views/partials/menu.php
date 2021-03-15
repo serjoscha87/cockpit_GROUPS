@@ -9,7 +9,7 @@ $module_active = strpos($_SERVER['REQUEST_URI'], 'groups') !== false;
     <li class="uk-grid-margin">
         <a class="uk-display-block uk-panel-card-hover uk-panel-box uk-panel-space {{$module_active ? 'uk-bg-primary uk-contrast' : ''}}" href="@route('/groups')">
             <div class="uk-svg-adjust">
-                <img class="uk-margin-small-right inherit-color" src="/assets/app/media/icons/accounts.svg" width="40" height="40" data-uk-svg alt="assets" />
+                <img class="uk-margin-small-right inherit-color" src="@url('assets:app/media/icons/accounts.svg')" width="40" height="40" data-uk-svg alt="assets" />
             </div>
             <div class="uk-text-truncate uk-text-small uk-margin-small-top">@lang('Groups')</div>
         </a>
